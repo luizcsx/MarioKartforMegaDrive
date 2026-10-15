@@ -13,7 +13,6 @@ void TITLE_show(void)
 
     VDP_setScreenWidth320();
     PAL_setPalette(PAL0, title_pal.data, DMA);
-
     VDP_drawImageEx(BG_A, &title_img,
                     TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USER_INDEX),
                     0, 0, FALSE, TRUE);
@@ -27,6 +26,9 @@ void TITLE_show(void)
 
     while (TRUE)
     {
+        if (!XGM_isPlayingPCM(SOUND_PCM_CH1_MSK))
+            XGM_startPlayPCM(MUSIC_PCM_ID, 1, SOUND_PCM_CH1);
+
         if ((timer / 30) % 2 == 0)
             VDP_drawText("PRESS START", 14, 24);
         else
