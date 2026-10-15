@@ -82,18 +82,21 @@ void TITLE_show(void)
             }
         }
         else
-        {
-            if (joy & BUTTON_A)
-            {
-                XGM_startPlayPCM(PCM_CONFIRM, 15, SOUND_PCM_CH2);
+{
+    if (joy & BUTTON_A)
+    {
+        XGM_startPlayPCM(PCM_CONFIRM, 15, SOUND_PCM_CH2);
 
-                u16 timeout = 120;
-                while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK) && timeout--)
-                    SYS_doVBlankProcess();
+        for (u16 i = 0; i < 3; i++)
+            SYS_doVBlankProcess();
 
-                break;
-            }
-        }
+        u16 timeout = 120;
+        while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK) && timeout--)
+            SYS_doVBlankProcess();
+
+        break;
+    }
+}
 
         SYS_doVBlankProcess();
         timer++;
