@@ -22,6 +22,21 @@ jobs:
 
       - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: rom-md
           path: out/rom.bin
+
+      - name: Upload rescomp intermediate files
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rescomp-debug
+          path: |
+            res/**/*.h
+            res/**/*.s
+            res/**/*.c
+            out/**/*.h
+            out/**/*.s
+            out/res/**
+          if-no-files-found: warn
