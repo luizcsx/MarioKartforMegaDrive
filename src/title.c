@@ -5,12 +5,12 @@
 #define PCM_INTRO    64
 #define PCM_LOOP     65
 #define PCM_NAV_SFX  80
+#define PCM_CONFIRM  81
 
-#define OPT_Y        20 
+#define OPT_Y        20
 
 static const char *opts[3] = { "START GAME", "RECORDS", "OPTIONS" };
-
-static const u16 optX[3] = { 4, 18, 29 };
+static const u16 optX[3]   = { 4, 18, 29 };
 static const u16 optLen[3] = { 10, 7, 7 };
 
 static void drawOptions(s16 selected)
@@ -43,6 +43,7 @@ void TITLE_show(void)
     XGM_setPCM(PCM_INTRO,   music_intro, sizeof(music_intro));
     XGM_setPCM(PCM_LOOP,    music_loop,  sizeof(music_loop));
     XGM_setPCM(PCM_NAV_SFX, sfx_nav,     sizeof(sfx_nav));
+    XGM_setPCM(PCM_CONFIRM, sfx_confirm, sizeof(sfx_confirm));
     XGM_startPlayPCM(PCM_INTRO, 1, SOUND_PCM_CH1);
 
     SYS_enableInts();
@@ -97,7 +98,15 @@ void TITLE_show(void)
                 XGM_startPlayPCM(PCM_NAV_SFX, 15, SOUND_PCM_CH2);
             }
 
-            if (joy & BUTTON_A) break;
+            if (joy & BUTTON_A)
+            {
+                XGM_startPlayPCM(PCM_CONFIRM, 15, SOUND_PCM_CH2);
+
+                for (u16 i = 0; i < 20; i++)
+                    SYS_doVBlankProcess();
+
+                break;
+            }
         }
 
         prev_joy = joy;
