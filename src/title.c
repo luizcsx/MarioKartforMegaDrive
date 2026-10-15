@@ -2,12 +2,14 @@
 #include "title.h"
 #include "title_res.h"
 
-#define MUSIC_PCM_ID  64
+#define PCM_INTRO  64
+#define PCM_LOOP   65
 
 void TITLE_show(void)
 {
     u16 timer = 0;
     u16 joy;
+    bool in_loop = FALSE;
 
     SYS_disableInts();
 
@@ -17,8 +19,10 @@ void TITLE_show(void)
                     TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USER_INDEX),
                     0, 0, FALSE, TRUE);
 
-    XGM_setPCM(MUSIC_PCM_ID, theme_music, sizeof(theme_music));
-    XGM_startPlayPCM(MUSIC_PCM_ID, 1, SOUND_PCM_CH1);
+    XGM_setPCM(PCM_INTRO, music_intro, sizeof(music_intro));
+    XGM_setPCM(PCM_LOOP,  music_loop,  sizeof(music_loop));
+
+    XGM_startPlayPCM(PCM_INTRO, 1, SOUND_PCM_CH1);
 
     SYS_enableInts();
 
@@ -26,8 +30,19 @@ void TITLE_show(void)
 
     while (TRUE)
     {
-        if (!XGM_isPlayingPCM(SOUND_PCM_CH1_MSK))
-            XGM_startPlayPCM(MUSIC_PCM_ID, 1, SOUND_PCM_CH1);
+        if (!in_loop)
+        {
+            if (!XGM_isPlayingPCM(SOUND_PCM_CH1_MSK))
+            {
+                XGM_startPlayPCM(PCM_LOOP, 1, SOUND_PCM_CH1);
+                in_loop = TRUE;
+            }
+        }
+        else
+        {
+            if (!XGM_isPlayingPCM(SOUND_PCM_CH1_MSK))
+                XGM_startPlayPCM(PCM_LOOP, 1, SOUND_PCM_CH1);
+        }
 
         if ((timer / 30) % 2 == 0)
             VDP_drawText("PRESS START", 14, 24);
