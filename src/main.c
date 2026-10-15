@@ -12,7 +12,7 @@ int main(bool hard)
 
     MENU_BG_draw();
 
-    PAL_fadeIn(0, 3, menu_bg_pal0.data, 20, FALSE);
+    PAL_fadeIn(0, 0, menu_bg_pal.data, 20, FALSE);
 
     while (TRUE)
     {
