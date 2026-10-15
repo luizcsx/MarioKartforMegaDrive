@@ -13,24 +13,23 @@ static const char *opts[3] = { "START GAME", "RECORDS", "OPTIONS" };
 static const u16 optX[3]   = { 4, 18, 29 };
 static const u16 optLen[3] = { 10, 7, 7 };
 
-static void drawOptions(s16 selected)
+static void drawOptions(void)
 {
     VDP_clearText(2, OPT_Y, 36);
 
     for (u16 i = 0; i < 3; i++)
         VDP_drawText(opts[i], optX[i], OPT_Y);
 
-    VDP_drawText("<", optX[selected] - 1, OPT_Y);
-    VDP_drawText(">", optX[selected] + optLen[selected], OPT_Y);
+    VDP_drawText("<", optX[0] - 1, OPT_Y);
+    VDP_drawText(">", optX[0] + optLen[0], OPT_Y);
 }
 
 void TITLE_show(void)
 {
     u16 timer = 0;
-    u16 joy = 0, prev_joy = 0;
+    u16 joy = 0;
     bool in_loop = FALSE;
     bool in_menu = FALSE;
-    s16 selected = 0;
 
     SYS_disableInts();
 
@@ -78,38 +77,23 @@ void TITLE_show(void)
             if (joy & BUTTON_START)
             {
                 VDP_clearText(14, 24, 11);
-                drawOptions(selected);
+                drawOptions();
                 in_menu = TRUE;
             }
         }
         else
         {
-            s16 next = selected;
-            if ((joy & BUTTON_LEFT)  && !(prev_joy & BUTTON_LEFT))  next--;
-            if ((joy & BUTTON_RIGHT) && !(prev_joy & BUTTON_RIGHT)) next++;
-
-            if (next < 0) next = 2;
-            if (next > 2) next = 0;
-
-            if (next != selected)
-            {
-                selected = next;
-                drawOptions(selected);
-                XGM_startPlayPCM(PCM_NAV_SFX, 15, SOUND_PCM_CH2);
-            }
-
             if (joy & BUTTON_A)
             {
                 XGM_startPlayPCM(PCM_CONFIRM, 15, SOUND_PCM_CH2);
 
-                for (u16 i = 0; i < 20; i++)
+                for (u16 i = 0; i < 35; i++)
                     SYS_doVBlankProcess();
 
                 break;
             }
         }
 
-        prev_joy = joy;
         SYS_doVBlankProcess();
         timer++;
     }
