@@ -14,8 +14,8 @@ void TITLE_show(void)
     PAL_setPalette(PAL0, title_pal.data, DMA);
 
     VDP_drawImageEx(BG_A, &title_img,
-                    TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USERINDEX),
-                    0, 0, FALSE, TRUE);
+                TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USER_INDEX),
+                0, 0, FALSE, TRUE);
 
     PAL_fadeIn(0, 0, title_pal.data, 30, FALSE);
 
