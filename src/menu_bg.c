@@ -20,10 +20,10 @@ void MENU_BG_draw(void)
 
     VDP_loadTileSet(menu_bg.tileset, TILE_USER_INDEX, DMA);
 
-    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0, 0,  0,  0,  IMG_W, IMG_H, DMA);
-    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0, 0,  IMG_W, 0,  IMG_W, IMG_H, DMA);
-    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0, 0,  0,  IMG_H, IMG_W, IMG_H, DMA);
-    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0, 0,  IMG_W, IMG_H, IMG_W, IMG_H, DMA);
+    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0,      0,      0, 0, IMG_W, IMG_H, DMA);
+    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, IMG_W,  0,      0, 0, IMG_W, IMG_H, DMA);
+    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, 0,      IMG_H,  0, 0, IMG_W, IMG_H, DMA);
+    VDP_setTileMapEx(BG_A, menu_bg.tilemap, attr, IMG_W,  IMG_H,  0, 0, IMG_W, IMG_H, DMA);
 
     hscroll = 0;
     vscroll = 0;
