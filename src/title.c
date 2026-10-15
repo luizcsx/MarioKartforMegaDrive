@@ -2,14 +2,35 @@
 #include "title.h"
 #include "title_res.h"
 
-#define PCM_INTRO  64
-#define PCM_LOOP   65
+#define PCM_INTRO    64
+#define PCM_LOOP     65
+#define PCM_NAV_SFX  80
+
+#define OPT_Y        20 
+
+static const char *opts[3] = { "START GAME", "RECORDS", "OPTIONS" };
+
+static const u16 optX[3] = { 4, 18, 29 };
+static const u16 optLen[3] = { 10, 7, 7 };
+
+static void drawOptions(s16 selected)
+{
+    VDP_clearText(2, OPT_Y, 36);
+
+    for (u16 i = 0; i < 3; i++)
+        VDP_drawText(opts[i], optX[i], OPT_Y);
+
+    VDP_drawText("<", optX[selected] - 1, OPT_Y);
+    VDP_drawText(">", optX[selected] + optLen[selected], OPT_Y);
+}
 
 void TITLE_show(void)
 {
     u16 timer = 0;
-    u16 joy;
+    u16 joy = 0, prev_joy = 0;
     bool in_loop = FALSE;
+    bool in_menu = FALSE;
+    s16 selected = 0;
 
     SYS_disableInts();
 
@@ -19,9 +40,9 @@ void TITLE_show(void)
                     TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USER_INDEX),
                     0, 0, FALSE, TRUE);
 
-    XGM_setPCM(PCM_INTRO, music_intro, sizeof(music_intro));
-    XGM_setPCM(PCM_LOOP,  music_loop,  sizeof(music_loop));
-
+    XGM_setPCM(PCM_INTRO,   music_intro, sizeof(music_intro));
+    XGM_setPCM(PCM_LOOP,    music_loop,  sizeof(music_loop));
+    XGM_setPCM(PCM_NAV_SFX, sfx_nav,     sizeof(sfx_nav));
     XGM_startPlayPCM(PCM_INTRO, 1, SOUND_PCM_CH1);
 
     SYS_enableInts();
@@ -44,18 +65,47 @@ void TITLE_show(void)
                 XGM_startPlayPCM(PCM_LOOP, 1, SOUND_PCM_CH1);
         }
 
-        if ((timer / 30) % 2 == 0)
-            VDP_drawText("PRESS START", 14, 24);
-        else
-            VDP_clearText(14, 24, 11);
-
         joy = JOY_readJoypad(JOY_1);
-        if (joy & BUTTON_START) break;
 
+        if (!in_menu)
+        {
+            if ((timer / 30) % 2 == 0)
+                VDP_drawText("PRESS START", 14, 24);
+            else
+                VDP_clearText(14, 24, 11);
+
+            if (joy & BUTTON_START)
+            {
+                VDP_clearText(14, 24, 11);
+                drawOptions(selected);
+                in_menu = TRUE;
+            }
+        }
+        else
+        {
+            s16 next = selected;
+            if ((joy & BUTTON_LEFT)  && !(prev_joy & BUTTON_LEFT))  next--;
+            if ((joy & BUTTON_RIGHT) && !(prev_joy & BUTTON_RIGHT)) next++;
+
+            if (next < 0) next = 2;
+            if (next > 2) next = 0;
+
+            if (next != selected)
+            {
+                selected = next;
+                drawOptions(selected);
+                XGM_startPlayPCM(PCM_NAV_SFX, 15, SOUND_PCM_CH2);
+            }
+
+            if (joy & BUTTON_A) break;
+        }
+
+        prev_joy = joy;
         SYS_doVBlankProcess();
         timer++;
     }
 
     XGM_stopPlayPCM(SOUND_PCM_CH1);
+    XGM_stopPlayPCM(SOUND_PCM_CH2);
     PAL_fadeOutAll(20, FALSE);
 }
