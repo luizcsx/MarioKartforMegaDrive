@@ -33,8 +33,8 @@ void MENU_BG_draw(void)
 
 void MENU_BG_scrollUpdate(void)
 {
-    hscroll = (hscroll + 1) & 511;
-    vscroll = (vscroll - 1) & 255;
+    hscroll = (hscroll - 1) & 511;
+    vscroll = (vscroll + 1) & 255;
 
     VDP_setHorizontalScroll(BG_A, hscroll);
     VDP_setVerticalScroll(BG_A, vscroll);
