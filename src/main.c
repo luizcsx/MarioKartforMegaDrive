@@ -11,11 +11,13 @@ int main(bool hard)
     VDP_clearPlane(BG_B, TRUE);
 
     MENU_BG_draw();
+    MENU_BG_startMusic();
 
     PAL_fadeIn(0, 0, menu_bg_pal.data, 20, FALSE);
 
     while (TRUE)
     {
+        MENU_BG_updateMusic();
         SYS_doVBlankProcess();
     }
 
