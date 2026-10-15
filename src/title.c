@@ -1,9 +1,6 @@
 #include <genesis.h>
 #include "title.h"
-
-extern const Palette title_pal;
-extern const Image   title_img;
-extern const u8      theme_music[];
+#include "title_res.h"
 
 #define MUSIC_PCM_ID  64
 
@@ -22,7 +19,6 @@ void TITLE_show(void)
                     0, 0, FALSE, TRUE);
 
     XGM_setPCM(MUSIC_PCM_ID, theme_music, sizeof(theme_music));
-
     XGM_startPlayPCM(MUSIC_PCM_ID, 1, SOUND_PCM_CH1);
 
     SYS_enableInts();
