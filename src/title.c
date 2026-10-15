@@ -86,12 +86,14 @@ void TITLE_show(void)
             if (joy & BUTTON_A)
             {
                 XGM_startPlayPCM(PCM_CONFIRM, 15, SOUND_PCM_CH2);
+
                 u16 timeout = 120;
                 while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK) && timeout--)
                     SYS_doVBlankProcess();
-            
+
                 break;
             }
+        }
 
         SYS_doVBlankProcess();
         timer++;
