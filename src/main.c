@@ -17,6 +17,7 @@ int main(bool hard)
 
     while (TRUE)
     {
+        MENU_BG_scrollUpdate();
         MENU_BG_updateMusic();
         SYS_doVBlankProcess();
     }
