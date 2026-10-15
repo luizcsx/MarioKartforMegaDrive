@@ -1,2 +1,2 @@
-PALETTE  title_pal  "title.png"
-IMAGE    title_img  "title.png" BEST
+PALETTE  title_pal  "gfx/title.png"
+IMAGE    title_img  "gfx/title.png" BEST
