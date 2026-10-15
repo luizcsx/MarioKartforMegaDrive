@@ -1,3 +1,3 @@
-PALETTE  title_pal    "title.png"
-IMAGE    title_img    "title.png" BEST
-WAV      theme_music  "theme.wav" XGM
+PALETTE  title_pal    "gfx/title.png"
+IMAGE    title_img    "gfx/title.png" BEST
+WAV      theme_music  "sfx/theme.wav" XGM
