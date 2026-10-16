@@ -9,19 +9,22 @@
 
 #define OPT_Y        20
 
-static const char *opts[3] = { "START GAME", "RECORDS", "OPTIONS" };
-static const u16 optX[3]   = { 4, 18, 29 };
-static const u16 optLen[3] = { 10, 7, 7 };
+static const char *opts[2] = { "RECORDS", "OPTIONS" };
+static const u16 optX[2]   = { 18, 29 };
+
+#define START_GAME_IMG_X   10
+#define START_GAME_IMG_Y   26
 
 static void drawOptions(void)
 {
     VDP_clearText(2, OPT_Y, 36);
 
-    for (u16 i = 0; i < 3; i++)
+    for (u16 i = 0; i < 2; i++)
         VDP_drawText(opts[i], optX[i], OPT_Y);
 
-    VDP_drawText("<", optX[0] - 1, OPT_Y);
-    VDP_drawText(">", optX[0] + optLen[0], OPT_Y);
+    VDP_drawImageEx(BG_A, &start_game_img,
+                    TILE_ATTR_FULL(PAL0, 0, FALSE, FALSE, TILE_USER_INDEX + 100),
+                    START_GAME_IMG_X, START_GAME_IMG_Y, FALSE, TRUE);
 }
 
 void TITLE_show(void)
